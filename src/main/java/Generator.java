@@ -1,0 +1,239 @@
+import com.github.javafaker.Faker;
+import interfaces.ICsv;
+import models.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+public class Generator implements ICsv {
+    private List<User> users;
+    private List<Doctor> doctors;
+    private List<Post> posts;
+    private List<HealthIssue> healthIssues;
+    private List<Announcement> announcements;
+    private int[] commentCount = {5,6,7,8,9,10};
+    private List<Comment> comments;
+
+    public Generator() {
+        this.users = new ArrayList<User>();
+        this.doctors = new ArrayList<Doctor>();
+        this.posts = new ArrayList<Post>();
+        this.healthIssues = new ArrayList<HealthIssue>();
+        this.announcements = new ArrayList<Announcement>();
+        this.comments = new ArrayList<Comment>();
+    }
+
+    public void run() {
+        generateUsers();
+        generateDoctors();
+        generateAnnouncements();
+        generateHealthIssues();
+        posts.addAll(healthIssues);
+        posts.addAll(announcements);
+        generateComments();
+        writeToCsv();
+    }
+
+    private void generateUsers() {
+        Faker faker = new Faker();
+        Calendar  calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -5);
+
+        int count = 1;
+        while(count <= 200) {
+            Date createdAt = faker.date().future(1825, TimeUnit.DAYS, calendar.getTime());
+            Date updatedAt = faker.date().between(createdAt, new Date());
+            User user = new User(
+                    count,
+                    faker.name().firstName(),
+                    faker.name().lastName(),
+                    faker.date().birthday(13, 50),
+                    Country.getRandom(),
+                    faker.internet().emailAddress(faker.name().username()),
+                    createdAt,
+                    updatedAt
+            );
+            count++;
+            users.add(user);
+        }
+
+
+    }
+
+    private void generateDoctors() {
+        Faker faker = new Faker();
+        Random random = new Random();
+
+        int count = 1;
+        while(count <= 75) {
+            User user = users.get(random.nextInt(users.size()));
+            Doctor doctor = new Doctor(count, Specialization.getRandom().name(), faker.lorem().paragraph(10), user);
+            doctors.add(doctor);
+            count++;
+        }
+
+//        for(Doctor doctor: doctors) {
+//            System.out.println(doctor);
+//        }
+
+    }
+
+    private void generateAnnouncements() {
+
+        Faker faker = new Faker();
+        Random random = new Random();
+        int doctorsSize = doctors.size();
+        int count = 1;
+
+        while(count <= 75) {
+            Doctor doctor = doctors.get(random.nextInt(doctorsSize));
+            List<Category> categoryList = buildCategories(random.nextInt(6));
+            Announcement announcement = new Announcement(
+                    count,
+                    faker.lorem().sentence(),
+                    String.join(" ", faker.lorem().paragraphs(5)),
+                    doctor,
+                    categoryList);
+
+            announcements.add(announcement);
+            count++;
+        }
+    }
+
+    private void generateHealthIssues() {
+        Faker faker = new Faker();
+        Random random = new Random();
+
+        int count = 1;
+        while(count <= 300) {
+            User user = users.get(random.nextInt(users.size()));
+            List<Category> categoryList = buildCategories(random.nextInt(6));
+            HealthIssue healthIssue = new HealthIssue(
+                    count, faker.lorem().sentence(),
+                    String.join(" ", faker.lorem().paragraphs(8)),
+                    user,
+                    categoryList,
+                    Status.getRandom()
+            );
+
+            healthIssues.add(healthIssue);
+            count++;
+        }
+
+    }
+
+    private List<Category> buildCategories(int limit) {
+        HashSet<Category> categoriesSet = new HashSet<Category>();
+        if(limit == 0) limit = 1;
+        int innerCount = 1;
+        while(innerCount <= limit) {
+            categoriesSet.add(Category.getRandom());
+            innerCount++;
+        }
+
+        return new ArrayList<Category>(categoriesSet);
+    }
+
+    private void generateComments() {
+        Random random = new Random();
+
+        int count = 1;
+
+        while(count <= 1000) {
+            int numOfComments = commentCount[random.nextInt(commentCount.length)];
+            Post post = healthIssues.get(random.nextInt(healthIssues.size()));
+            List<Comment> createdComments = createComments(numOfComments, count, post);
+            count += numOfComments;
+            comments.addAll(createdComments);
+        }
+
+    }
+
+    private List<Comment> createComments(int limit, int id, Post post) {
+        Faker faker = new Faker();
+        int innerCount = id;
+        Random random = new Random();
+        List<Comment> commentList = new ArrayList<Comment>();
+
+        while(innerCount <= (id + limit)) {
+            Doctor doctor = doctors.get(random.nextInt(doctors.size()));
+            Comment comment = new Comment(
+                    innerCount,
+                    doctor.getUser(),
+                    post,
+                    0,
+                    String.join(" ", faker.lorem().sentences(3))
+            );
+
+            commentList.add(comment);
+
+            innerCount++;
+        }
+
+        int checkedIndex = random.nextInt(limit);
+
+        Comment comment = commentList.remove(checkedIndex);
+
+        commentList.add(checkedIndex, new Comment(
+                comment.getId(),
+                comment.getUser(),
+                comment.getPost(),
+                1,
+                comment.getText()
+        ));
+
+        return commentList;
+    }
+
+    @Override
+    public String writeToCsv() {
+        return writeToCsv(users) + writeToCsv(healthIssues) + writeToCsv(announcements) + writeToCsv(comments);
+    }
+
+    public String writeToCsv(List list) {
+        StringBuffer buffer = new StringBuffer();
+
+        String filename = list.get(0).getClass().getName().toLowerCase();
+
+        List<ICsv> transformed = convertToICsv(list);
+
+        for(ICsv obj: transformed) {
+            buffer.append(obj.writeToCsv() + "\n");
+        }
+
+        writeToCsv(filename, buffer);
+
+        return buffer.toString();
+    }
+
+    private void writeToCsv(String filename, StringBuffer buffer) {
+        try {
+            File file = new File(filename + ".csv");
+            if(file.exists()) {
+               System.out.println(filename + ".csv exists");
+            } else {
+                file.createNewFile();
+
+                FileWriter fileWriter = new FileWriter(filename + ".csv");
+                fileWriter.write(buffer.toString());
+                fileWriter.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+    private List<ICsv> convertToICsv(List list) {
+        List<ICsv> output = new ArrayList<ICsv>();
+
+        for(Object item: list) {
+            output.add((ICsv) item);
+        }
+
+        return output;
+    }
+}
