@@ -73,11 +73,6 @@ public class Generator implements ICsv {
             doctors.add(doctor);
             count++;
         }
-
-//        for(Doctor doctor: doctors) {
-//            System.out.println(doctor);
-//        }
-
     }
 
     private void generateAnnouncements() {

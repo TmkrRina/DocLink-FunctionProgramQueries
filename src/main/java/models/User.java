@@ -2,6 +2,7 @@ package models;
 
 import interfaces.ICsv;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -74,17 +75,31 @@ public class User implements ICsv {
 
     @Override
     public String toString() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", country='" + country + '\'' +
                 ", email='" + email + '\'' +
+                ", createdAt='" + simpleDateFormat.format(createdAt) + '\'' +
+                ", updatedAt='" + simpleDateFormat.format(updatedAt) + '\'' +
                 '}';
     }
 
     @Override
     public String writeToCsv() {
-        return String.format("%d,%s,%s,%s,%s,%s,%s,%s", id, firstName,lastName,birthday, country, email, createdAt, updatedAt);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return String.format(
+                "%d,%s,%s,%s,%s,%s,%s,%s",
+                id,
+                firstName,
+                lastName,
+                simpleDateFormat.format(birthday),
+                country,
+                email,
+                simpleDateFormat.format(createdAt),
+                simpleDateFormat.format(updatedAt)
+        );
     }
 }

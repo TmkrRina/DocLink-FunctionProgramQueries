@@ -2,6 +2,7 @@ package models;
 
 import interfaces.ICsv;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -60,6 +61,7 @@ public class Comment implements ICsv {
 
     @Override
     public String writeToCsv() {
-        return String.format("%d,%d,%d,%d,%s,\"%s\"", id, user.getId(), post.getId(), checked, createdAt.toString(), text);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        return String.format("%d,%d,%d,%d,%s,\"%s\"", id, user.getId(), post.getId(), checked, simpleDateFormat.format(createdAt), text);
     }
 }

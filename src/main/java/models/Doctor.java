@@ -2,6 +2,7 @@ package models;
 
 import interfaces.ICsv;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -56,6 +57,15 @@ public class Doctor implements ICsv {
 
     @Override
     public String writeToCsv() {
-        return String.format("%d,%s,\"%s\",%d", id, specialization, experience, user.getId());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        return String.format(
+                "%d,%s,\"%s\",%d",
+                id,
+                specialization,
+                experience,
+                user.getId(),
+                simpleDateFormat.format(createdAt),
+                simpleDateFormat.format(updatedAt)
+        );
     }
 }
