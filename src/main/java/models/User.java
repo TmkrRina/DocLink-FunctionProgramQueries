@@ -1,5 +1,6 @@
 package models;
 
+import data.DataBuilder;
 import interfaces.ICsv;
 
 import java.text.SimpleDateFormat;
@@ -7,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 public class User implements ICsv {
     private Integer id;
@@ -22,6 +24,7 @@ public class User implements ICsv {
     private String email;
     private Date createdAt;
     private Date updatedAt;
+    private List<Role> roles;
 
     public User(Integer id, String firstName, String lastName, Date birthday, String country, String email) {
         this.id = id;
@@ -43,6 +46,18 @@ public class User implements ICsv {
         this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public User(Integer id, String firstName, String lastName, Date birthday, Country country, String email, Date createdAt, Date updatedAt, List<Role> roles) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
+        this.country = country;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.roles = roles;
     }
 
     public String getFirstName() {
@@ -73,11 +88,16 @@ public class User implements ICsv {
         return updatedAt;
     }
 
+    private String formatRoles() {
+        return "\"" + roles.stream().map(x -> x.name()).reduce((a, b) -> a + "<>" + b).get() + "\"";
+    }
+
     @Override
     public String toString() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return "User{" +
                 "id=" + id +
+                ", roles=" + roles +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", country='" + country + '\'' +
@@ -87,19 +107,28 @@ public class User implements ICsv {
                 '}';
     }
 
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
     @Override
     public String writeToCsv() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         return String.format(
-                "%d,%s,%s,%s,%s,%s,%s,%s",
+                "%d,%s,%s,%s,%s,%s,%s,%s,%s",
                 id,
                 firstName,
                 lastName,
-                simpleDateFormat.format(birthday),
+                DataBuilder.getSimpleDateFormat().format(birthday),
                 country,
                 email,
-                simpleDateFormat.format(createdAt),
-                simpleDateFormat.format(updatedAt)
+                DataBuilder.getSimpleDateFormat().format(createdAt),
+                DataBuilder.getSimpleDateFormat().format(updatedAt),
+                formatRoles()
         );
     }
 }

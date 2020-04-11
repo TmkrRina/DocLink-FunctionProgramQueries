@@ -13,7 +13,7 @@ public class Generator implements ICsv {
     private List<Post> posts;
     private List<HealthIssue> healthIssues;
     private List<Announcement> announcements;
-    private int[] commentCount = {5,6,7,8,9,10};
+    private int[] commentCount = {5, 6, 7, 8, 9, 10};
     private List<Comment> comments;
 
     public Generator() {
@@ -38,13 +38,17 @@ public class Generator implements ICsv {
 
     private void generateUsers() {
         Faker faker = new Faker();
-        Calendar  calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -5);
+        List<Role> roles = new ArrayList<Role>();
+        roles.add(Role.PATIENT);
+
 
         int count = 1;
-        while(count <= 200) {
+        while (count <= 200) {
             Date createdAt = faker.date().future(1825, TimeUnit.DAYS, calendar.getTime());
             Date updatedAt = faker.date().between(createdAt, new Date());
+
             User user = new User(
                     count,
                     faker.name().firstName(),
@@ -53,7 +57,8 @@ public class Generator implements ICsv {
                     Country.getRandom(),
                     faker.internet().emailAddress(faker.name().username()),
                     createdAt,
-                    updatedAt
+                    updatedAt,
+                    roles
             );
             count++;
             users.add(user);
@@ -65,10 +70,30 @@ public class Generator implements ICsv {
     private void generateDoctors() {
         Faker faker = new Faker();
         Random random = new Random();
-
         int count = 1;
-        while(count <= 75) {
-            User user = users.get(random.nextInt(users.size()));
+        List<Role> roles = new ArrayList<Role>();
+        roles.add(Role.DOCTOR);
+
+
+        while (count <= 75) {
+            int index = random.nextInt(users.size());
+            User user = users.get(index);
+            users.remove(index);
+
+            user = new User(
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getBirthday(),
+                    user.getCountry(),
+                    user.getEmail(),
+                    user.getCreatedAt(),
+                    user.getUpdatedAt(),
+                    roles
+            );
+
+            users.add(index, user);
+
             Doctor doctor = new Doctor(count, Specialization.getRandom().name(), faker.lorem().paragraph(10), user);
             doctors.add(doctor);
             count++;
@@ -76,13 +101,12 @@ public class Generator implements ICsv {
     }
 
     private void generateAnnouncements() {
-
         Faker faker = new Faker();
         Random random = new Random();
         int doctorsSize = doctors.size();
         int count = 1;
 
-        while(count <= 75) {
+        while (count <= 75) {
             Doctor doctor = doctors.get(random.nextInt(doctorsSize));
             List<Category> categoryList = buildCategories(random.nextInt(6));
             Announcement announcement = new Announcement(
@@ -101,8 +125,8 @@ public class Generator implements ICsv {
         Faker faker = new Faker();
         Random random = new Random();
 
-        int count = 1;
-        while(count <= 300) {
+        int count = 76;
+        while (count <= 375) {
             User user = users.get(random.nextInt(users.size()));
             List<Category> categoryList = buildCategories(random.nextInt(6));
             HealthIssue healthIssue = new HealthIssue(
@@ -121,9 +145,9 @@ public class Generator implements ICsv {
 
     private List<Category> buildCategories(int limit) {
         HashSet<Category> categoriesSet = new HashSet<Category>();
-        if(limit == 0) limit = 1;
+        if (limit == 0) limit = 1;
         int innerCount = 1;
-        while(innerCount <= limit) {
+        while (innerCount <= limit) {
             categoriesSet.add(Category.getRandom());
             innerCount++;
         }
@@ -136,7 +160,7 @@ public class Generator implements ICsv {
 
         int count = 1;
 
-        while(count <= 1000) {
+        while (count <= 1000) {
             int numOfComments = commentCount[random.nextInt(commentCount.length)];
             Post post = healthIssues.get(random.nextInt(healthIssues.size()));
             List<Comment> createdComments = createComments(numOfComments, count, post);
@@ -152,7 +176,7 @@ public class Generator implements ICsv {
         Random random = new Random();
         List<Comment> commentList = new ArrayList<Comment>();
 
-        while(innerCount <= (id + limit)) {
+        while (innerCount <= (id + limit)) {
             Doctor doctor = doctors.get(random.nextInt(doctors.size()));
             Comment comment = new Comment(
                     innerCount,
@@ -184,7 +208,7 @@ public class Generator implements ICsv {
 
     @Override
     public String writeToCsv() {
-        return writeToCsv(users) + writeToCsv(healthIssues) + writeToCsv(announcements) + writeToCsv(comments);
+        return writeToCsv(users) + writeToCsv(doctors) + writeToCsv(healthIssues) + writeToCsv(announcements) + writeToCsv(comments);
     }
 
     public String writeToCsv(List list) {
@@ -194,7 +218,7 @@ public class Generator implements ICsv {
 
         List<ICsv> transformed = convertToICsv(list);
 
-        for(ICsv obj: transformed) {
+        for (ICsv obj : transformed) {
             buffer.append(obj.writeToCsv() + "\n");
         }
 
@@ -206,8 +230,8 @@ public class Generator implements ICsv {
     private void writeToCsv(String filename, StringBuffer buffer) {
         try {
             File file = new File(filename + ".csv");
-            if(file.exists()) {
-               System.out.println(filename + ".csv exists");
+            if (file.exists()) {
+                System.out.println(filename + ".csv exists");
             } else {
                 file.createNewFile();
 
@@ -225,7 +249,7 @@ public class Generator implements ICsv {
     private List<ICsv> convertToICsv(List list) {
         List<ICsv> output = new ArrayList<ICsv>();
 
-        for(Object item: list) {
+        for (Object item : list) {
             output.add((ICsv) item);
         }
 

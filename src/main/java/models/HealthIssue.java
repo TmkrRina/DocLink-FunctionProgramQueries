@@ -1,5 +1,6 @@
 package models;
 
+import data.DataBuilder;
 import interfaces.ICsv;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +19,13 @@ public class HealthIssue extends Post implements ICsv {
     public HealthIssue(Integer id, String title, String description, User user, Date createdAt, Date updatedAt, List<Category> categories) {
         super(id, title, description, user, createdAt, updatedAt, categories);
         this.postType = PostType.HEALTH_ISSUE;
+
+    }
+
+    public HealthIssue(Integer id, String title, String description, User user, Date createdAt, Date updatedAt, List<Category> categories, Status status) {
+        this(id, title, description, user, createdAt, updatedAt, categories);
+        this.status = status;
+        this.postType = PostType.HEALTH_ISSUE;
     }
 
     public Status getStatus() {
@@ -26,15 +34,15 @@ public class HealthIssue extends Post implements ICsv {
 
     @Override
     public String writeToCsv() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+
         return String.format(
                 "%d,%s,\"%s\",%d,%s,%s,%s,%s",
                 id,
-                title,
+                "\"" + title + "\"",
                 description,
                 user.getId(),
-                simpleDateFormat.format(createdAt),
-                simpleDateFormat.format(updatedAt),
+                DataBuilder.getSimpleDateFormat().format(createdAt),
+                DataBuilder.getSimpleDateFormat().format(updatedAt),
                 categoriesToCsvFormat(),
                 status
         );

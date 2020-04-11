@@ -1,5 +1,6 @@
 package models;
 
+import data.DataBuilder;
 import interfaces.ICsv;
 
 import java.text.SimpleDateFormat;
@@ -23,6 +24,15 @@ public class Comment implements ICsv {
         this.user = user;
         this.post = post;
         this.createdAt = new Date();
+        this.checked = checked;
+        this.text = text;
+    }
+
+    public Comment(Integer id, User user, Post post, Integer checked, String text, Date createdAt) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+        this.createdAt = createdAt;
         this.checked = checked;
         this.text = text;
     }
@@ -61,7 +71,13 @@ public class Comment implements ICsv {
 
     @Override
     public String writeToCsv() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        return String.format("%d,%d,%d,%d,%s,\"%s\"", id, user.getId(), post.getId(), checked, simpleDateFormat.format(createdAt), text);
+        return String.format(
+                "%d,%d,%d,%d,%s,\"%s\"",
+                id,
+                user.getId(),
+                post.getId(),
+                checked,
+                DataBuilder.getSimpleDateFormat().format(createdAt),
+                text);
     }
 }
