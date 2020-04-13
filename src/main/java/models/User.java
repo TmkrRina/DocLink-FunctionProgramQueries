@@ -1,8 +1,11 @@
 package models;
 
+//import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import data.DataBuilder;
+import functions.DocLinkFunctions;
 import interfaces.ICsv;
 
+//import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -130,5 +133,13 @@ public class User implements ICsv {
                 DataBuilder.getSimpleDateFormat().format(updatedAt),
                 formatRoles()
         );
+    }
+
+    public List<Comment> getComments() {
+        return DocLinkFunctions.getAllComments.apply(this, DataBuilder.getComments());
+    }
+
+    public List<Post> getHealthIssues() {
+        return DocLinkFunctions.getAllHealthIssues.apply(this, DataBuilder.getPosts());
     }
 }
