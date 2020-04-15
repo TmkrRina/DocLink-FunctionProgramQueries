@@ -34,9 +34,9 @@ public class Application {
 //        System.out.printf("=====%n%s%n=======%n", token1.size());
 //        System.out.printf("=====%n%s%n=======%n", token2.size());
 //        System.out.printf("=====%n%s%n=======%n", token2);
-//        System.out.printf("=====%n%s%n=======%n", );
+//        System.out.printf("=====%n%s%n=======%n", );r
 //        System.out.printf("=====%n%s%n=======%n", DocLinkFunctions.jaccardIndex.apply(token1, token2));
-        System.out.printf("=====%n%s%n=======%n", DocLinkFunctions.recommendDoctors.apply(user, DataBuilder.getDoctors()));
+        System.out.printf("=====%n%s%n=======%n", DocLinkFunctions.recommendDoctorsToUser.apply(user, user.getHealthIssues(), DataBuilder.getDoctors(), DataBuilder.getComments(), 55).size());
 
     }
 }
