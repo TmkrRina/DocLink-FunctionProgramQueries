@@ -1,11 +1,13 @@
 package models;
 
 import data.DataBuilder;
+import functions.DocLinkFunctions;
 import interfaces.ICsv;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class Doctor implements ICsv {
     private Integer id;
