@@ -64,6 +64,7 @@ public class Comment implements ICsv {
                 ", user=" + user +
                 ", post=" + post +
                 ", checked=" + checked +
+                ", createdAtP="+createdAt+
                 '}';
 
         return String.format("%n%s%n", base);
