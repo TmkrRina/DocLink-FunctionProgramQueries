@@ -32,6 +32,7 @@ public class DocLinkFunctionsTest {
 
     @Test
     public void reducesPosts() {
+        System.out.println(DocLinkFunctions.reducePosts.apply(posts));
         assertEquals("description1 description2 description3 description4 description5", DocLinkFunctions.reducePosts.apply(posts));
     }
 
