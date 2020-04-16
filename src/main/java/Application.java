@@ -1,12 +1,19 @@
 import data.DataBuilder;
 import functions.DocLinkFunctions;
+import functions.DoctorsWithMostComments;
+import functions.IssuesNotResolved;
+import models.Comment;
 import models.Post;
-import models.PostType;
-import models.User;
 
-import java.util.List;
-import java.util.stream.Collector;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 public class Application {
     public static void main(String[] args) {
@@ -15,28 +22,30 @@ public class Application {
 
         try {
             DataBuilder.setUp();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        User user = DataBuilder.getUsers().get(2);
+        //   public static String doctorWithMostComments(){
+        Calendar calendar = Calendar.getInstance();
+        Date current = calendar.getTime();
+        calendar.add(Calendar.DATE, -30);
+        Date past = calendar.getTime();
 
-//        System.out.println(user.getComments().size());
-        Post post1 = DataBuilder.getPosts().get(100);
-        Post post2 = DataBuilder.getPosts().get(199);
+        System.out.println(current);
+        System.out.println(past);
 
-        List<String> token1 = DocLinkFunctions.tokenize.apply(post1.getDescription());
-        List<String> token2 = DocLinkFunctions.tokenize.apply(post2.getDescription());
+        List<Comment> comments = DataBuilder.getComments();
 
-//        System.out.printf("=======%n%s%n===========%n%d%n==========%n", post.getDescription(), post.getDescription().split(" ").length);
-//        double intersectionSize = (double) DocLinkFunctions.getIntersection.apply(token1, token2).size();
+        System.out.println(DoctorsWithMostComments.getDoctor.apply(comments, past, current));
 
-//        System.out.printf("=====%n%s%n=======%n", token1.size());
-//        System.out.printf("=====%n%s%n=======%n", token2.size());
-//        System.out.printf("=====%n%s%n=======%n", token2);
-//        System.out.printf("=====%n%s%n=======%n", );r
-//        System.out.printf("=====%n%s%n=======%n", DocLinkFunctions.jaccardIndex.apply(token1, token2));
-        System.out.printf("=====%n%s%n=======%n", DocLinkFunctions.recommendDoctorsToUser.apply(user, user.getHealthIssues(), DataBuilder.getDoctors(), DataBuilder.getComments(), 55).size());
+        List<Post> posts = DataBuilder.getPosts();
+
+        System.out.println(IssuesNotResolved.issuesNotResolved.apply(posts));
+
+
 
     }
+
 }

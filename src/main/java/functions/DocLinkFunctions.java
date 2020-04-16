@@ -1,5 +1,6 @@
 package functions;
 
+
 import interfaces.IDoctorsFilter;
 import interfaces.IPostRecommendation;
 import interfaces.IPostsFilter;
@@ -88,6 +89,5 @@ public class DocLinkFunctions {
                     posts, threshHold
             )
     );
-
 
 }
