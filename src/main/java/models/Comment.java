@@ -19,11 +19,11 @@ public class Comment implements ICsv {
         return createdAt;
     }
 
-    public Comment(Integer id, User user, Post post, Integer checked, String text) {
+    public Comment(Integer id, User user, Post post, Integer checked,Date date, String text) {
         this.id = id;
         this.user = user;
         this.post = post;
-        this.createdAt = new Date();
+        this.createdAt = date;
         this.checked = checked;
         this.text = text;
     }
@@ -64,6 +64,7 @@ public class Comment implements ICsv {
                 ", user=" + user +
                 ", post=" + post +
                 ", checked=" + checked +
+                ", createdAt=" + DataBuilder.getSimpleDateFormat().format(createdAt) +
                 '}';
 
         return String.format("%n%s%n", base);
