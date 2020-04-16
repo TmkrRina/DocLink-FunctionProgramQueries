@@ -61,10 +61,10 @@ public class Doctor implements ICsv {
 
     @Override
     public String toString() {
-        return "Doctor{" +
+        return "\nDoctor{" +
                 "id=" + id +
                 ", user=" + user +
-                '}';
+                '}' + "\n";
     }
 
     @Override
