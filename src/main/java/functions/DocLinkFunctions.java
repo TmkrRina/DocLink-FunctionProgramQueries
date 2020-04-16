@@ -62,12 +62,6 @@ public class DocLinkFunctions {
                     .collect(Collectors.toList())
     );
 
-    public static final Function<List<Comment>, List<Integer>> getPostIdsThroughComments = (
-            comments -> getPostsThroughComments.apply(comments)
-                    .stream()
-                    .map(post -> post.getId())
-                    .collect(Collectors.toList())
-    );
 
     public static final IPostsFromComments userPostsWithDoctorComment = (
             (user, doctor, comments) -> getAllComments.apply(doctor.getUser(), comments)
