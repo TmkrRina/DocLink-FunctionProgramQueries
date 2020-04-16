@@ -1,15 +1,9 @@
 package functions;
 
-import data.DataBuilder;
 import models.*;
-
-import javax.swing.*;
-import javax.swing.text.html.parser.Entity;
-import java.security.KeyStore;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,7 +52,7 @@ public interface DocLinkFunctionsWonde {
 
     static Function<List<Post>, Map<String,Category>> groupingHealthIssubeByAgeGroup = (listOfPosts) -> listOfPosts.stream()
             .filter(aPost -> aPost instanceof HealthIssue)
-            .sorted(Comparator.comparing(aPost-> aPost.getUser().getAge()).reversed())
+            .sorted(Comparator.comparing(aPost-> aPost.getUser().getAge()))
             .collect(Collectors.groupingBy((aPost -> mapUserToAgegroup.apply(aPost.getUser(), 100)),
                      Collectors.flatMapping(aPost -> aPost.getCategories().stream(), Collectors.toList())))
             .entrySet()
