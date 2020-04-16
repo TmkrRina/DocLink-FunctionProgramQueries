@@ -35,12 +35,11 @@ public abstract class Post {
         this.categories = categories;
     }
 
-    public Post(Integer id, String title, String description, User user, PostType postType, Date createdAt, Date updatedAt, List<Category> categories) {
+    public Post(Integer id, String title, String description, User user, Date createdAt, Date updatedAt, List<Category> categories) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.user = user;
-        this.postType = postType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.categories = categories;
@@ -85,9 +84,11 @@ public abstract class Post {
     public String categoriesToCsvFormat() {
         StringBuffer buffer = new StringBuffer("");
         for(Category cat: categories) {
-            buffer.append(cat + ",");
+            buffer.append(cat + "<>");
         }
 
-        return "<% " + buffer.toString().substring(0, buffer.length() - 1) + " %>";
+        return "\"" + buffer.toString().substring(0, buffer.length() - 2) + "\"";
     }
+
+
 }

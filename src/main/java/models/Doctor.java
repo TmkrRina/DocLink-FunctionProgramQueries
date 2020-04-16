@@ -1,9 +1,13 @@
 package models;
 
+import data.DataBuilder;
+import functions.DocLinkFunctions;
 import interfaces.ICsv;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class Doctor implements ICsv {
     private Integer id;
@@ -34,6 +38,15 @@ public class Doctor implements ICsv {
         this.updatedAt = new Date();
     }
 
+    public Doctor(Integer id, String specialization, String experience, User user, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.specialization = Specialization.valueOf(specialization);
+        this.experience = experience;
+        this.user = user;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Specialization getSpecialization() {
         return specialization;
     }
@@ -48,14 +61,23 @@ public class Doctor implements ICsv {
 
     @Override
     public String toString() {
-        return "Doctor{" +
+        return "\nDoctor{" +
                 "id=" + id +
                 ", user=" + user +
-                '}';
+                '}' + "\n";
     }
 
     @Override
     public String writeToCsv() {
-        return String.format("%d,%s,\"%s\",%d", id, specialization, experience, user.getId());
+
+        return String.format(
+                "%d,%s,\"%s\",%d,%s,%s",
+                id,
+                specialization,
+                experience,
+                user.getId(),
+                DataBuilder.getSimpleDateFormat().format(createdAt),
+                DataBuilder.getSimpleDateFormat().format(updatedAt)
+        );
     }
 }
