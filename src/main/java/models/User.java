@@ -1,11 +1,9 @@
 package models;
 
-//import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import data.DataBuilder;
 import functions.DocLinkFunctions;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-//import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,7 +11,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-public class User implements ICsv {
+public class User implements IPostsWithComment {
     private Integer id;
 
     public Integer getId() {

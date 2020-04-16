@@ -1,13 +1,12 @@
 package models;
 
 import data.DataBuilder;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Announcement extends Post implements ICsv {
+public class Announcement extends Post implements IPostsWithComment {
     public Announcement(Integer id, String title, String description, Doctor doctor, List<Category> categoryList) {
         super(id, title, description, doctor.getUser(), categoryList);
         this.postType = PostType.ANNOUNCEMENT;
