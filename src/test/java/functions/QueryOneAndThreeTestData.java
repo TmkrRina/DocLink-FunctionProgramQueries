@@ -1,3 +1,5 @@
+package functions;
+
 import models.*;
 
 import java.util.*;
@@ -47,16 +49,17 @@ public class QueryOneAndThreeTestData {
         };
 
         //List of Users
-        user1 = new User(4,"Oswaldo","Goldner",new Date(2006-18-19),Country.Nigeria,"marion.feeney@gmail.com",new Date(2020-06-13),new Date(2020-29-14),rolesForTestD);
-        user2 = new User(10,"Janean","Pfannerstill",new Date(1972-07-21),Country.Nigeria,"keith.bradtke@yahoo.com",new Date(2017-56-22),new Date(2019-51-14), rolesForTestD);
-        user3 = new User(24,"Darci","Gutmann",new Date(2001-22-04),Country.Ethiopia,"tyrone.rutherford@gmail.com",new Date(2015-35-23), new Date(2017-38-11),rolesForTestD);
-        user4 = new User(26,"Paris","Hintz",new Date(1972-49-02 ),Country.Nepal,"isaias.howell@hotmail.com",new Date(2020-56-17),new Date(2020-12-17), rolesForTestD);
-        user5 = new User(30,"Joaquina","Prosacco",new Date(1996-39-03) ,Country.USA,"jonna.gorczany@yahoo.com",new Date(2019-07-27), new Date(2019-07-06), rolesForTestD);
-        user6 = new User(39,"Lucilla","Kreiger",new Date(2006-36-16) ,Country.USA,"tuan.baumbach@hotmail.com",new Date(2015-26-03) ,new Date(2019-42-30), rolesForTestD);
-        user7 = new User(49,"Jonah","Lesch",new Date(1988-39-19),Country.Ethiopia,"joe.stoltenberg@gmail.com",new Date(2018-59-05),new Date(2019-45-12), rolesForTestP);
-        user8 = new User(54,"Aleida","Padberg",new Date(2006-17-22) ,Country.Ethiopia,"rocco.simonis@gmail.com",new Date(2018-46-04), new Date(2019-27-11), rolesForTestP);
-        user9 = new User(56,"Dorian","Lang",new Date(1970-05-30),Country.Nepal,"darcy.monahan@hotmail.com",new Date(2015-57-18),new Date(2019-01-12),rolesForTestP);
-        user10 = new User(75,"Leroy","Strosin",new Date(1984-23-29),Country.Nepal,"andy.larkin@gmail.com",new Date(2016-38-14),new Date(2019-04-13),rolesForTestP);
+        user1 = new User(4,"Oswaldo","Goldner",new Date("December 25, 1992 23:15:20"), Country.Nigeria,"marion.feeney@gmail.com",new Date(2020-06-13),new Date(2020-29-14),rolesForTestD);
+        user2 = new User(10,"Janean","Pfannerstill",new Date("December 25, 1986 23:15:20"),Country.Nigeria,"keith.bradtke@yahoo.com",new Date(2017-56-22),new Date(2019-51-14), rolesForTestD);
+        user3 = new User(24,"Darci","Gutmann",new Date("December 25, 1995 23:15:20"),Country.Ethiopia,"tyrone.rutherford@gmail.com",new Date(2015-35-23), new Date(2017-38-11),rolesForTestD);
+        user4 = new User(26,"Paris","Hintz",new Date("December 25, 1977 23:15:20"),Country.Nepal,"isaias.howell@hotmail.com",new Date(2020-56-17),new Date(2020-12-17), rolesForTestD);
+        user5 = new User(30,"Joaquina","Prosacco",new Date("December 25, 1975 23:15:20") ,Country.USA,"jonna.gorczany@yahoo.com",new Date(2019-07-27), new Date(2019-07-06), rolesForTestD);
+        user6 = new User(39,"Lucilla","Kreiger",new Date("December 25, 1982 23:15:20") ,Country.USA,"tuan.baumbach@hotmail.com",new Date(2015-26-03) ,new Date(2019-42-30), rolesForTestD);
+        user7 = new User(49,"Jonah","Lesch",new Date("December 25, 1966 23:15:20"),Country.Ethiopia,"joe.stoltenberg@gmail.com",new Date(2018-59-05),new Date(2019-45-12), rolesForTestP);
+        user8 = new User(54,"Aleida","Padberg",new Date("December 25, 1972 23:15:20") ,Country.Ethiopia,"rocco.simonis@gmail.com",new Date(2018-46-04), new Date(2019-27-11), rolesForTestP);
+        user9 = new User(56,"Dorian","Lang",new Date("December 25, 1968 23:15:20"),Country.Nepal,"darcy.monahan@hotmail.com",new Date(2015-57-18),new Date(2019-01-12),rolesForTestP);
+        user10 = new User(75,"Leroy","Strosin",new Date("December 25, 1965 23:15:20"),Country.Nepal,"andy.larkin@gmail.com",new Date(2016-38-14),new Date(2019-04-13),rolesForTestP);
+
 
         // List of Doctors
         doc1 = new Doctor(1, "Cardiology" , "seven", user1);
@@ -74,7 +77,6 @@ public class QueryOneAndThreeTestData {
         healthIssue4 = new HealthIssue(4, "Painful Gum", "Frequent gum bleeding and severe pain during seeping cold drinks.", user10, categoryListTeeth, Status.RESOLVED);
 
         // Comments made by doctors
-        Comment cmt = new Comment(102, user1, healthIssue1,1,"Hic molestiae molestiae quos animi. Hic culpa maxime. Iusto est ex atque vel et.");
         comtbyDoc1Hi1 = new Comment(1, user1, healthIssue1, 0, "See a cardiologist ASAP");
         comtbyDoc2Hi1 = new Comment(2, user2, healthIssue1, 0, "We can check up your heat here.");
         comtbyDoc3Hi1 = new Comment(3, user3, healthIssue1, 1, "you have see a doctor in a day");

@@ -32,31 +32,40 @@ public interface DocLinkFunctionsWonde {
 
     List<String> ageGroups = new ArrayList<String>() {
         {
-            add("00 - 09"); add("10-19"); add("20-29"); add("30-39"); add("40-49"); add("50-59"); add("60-69");
-            add("70-79"); add("80-89"); add("90-99"); add("100-109");
+            add("[0-9]"); add("[10-19]"); add("[20-29]"); add("[30-39]"); add("[40-49]"); add("[50-59]"); add("[60-69]");
+            add("[70-79]"); add("[80-89]"); add("[90-99]"); add("[100-109]");
         }
     };
 
     static BiFunction<User, Integer, String> mapUserToAgegroup= (user, max) -> Stream.of(user)
             .map(User::getAge)
-            .map(aAge -> ageGroups.get(Math.min(aAge, max)/10))
+            .map(aAge -> ageGroups.get((int) Math.min(aAge, max)/10))
             .collect(Collectors.joining());
 
     static Function<List<Category>, Category> findPrevalentCategory = (listOfCategory) -> listOfCategory.stream()
             .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
             .entrySet()
             .stream()
-            .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+            .sorted(Comparator.<Map.Entry<Category,Long>, Long>comparing(Map.Entry::getValue)
+                    .thenComparing(Comparator.comparing(Map.Entry::getKey)))
             .map(Map.Entry::getKey)
             .findFirst().get();
 
     static Function<List<Post>, Map<String,Category>> groupingHealthIssubeByAgeGroup = (listOfPosts) -> listOfPosts.stream()
             .filter(aPost -> aPost instanceof HealthIssue)
             .sorted(Comparator.comparing(aPost-> aPost.getUser().getAge()))
-            .collect(Collectors.groupingBy((aPost -> mapUserToAgegroup.apply(aPost.getUser(), 100)),
-                     Collectors.flatMapping(aPost -> aPost.getCategories().stream(), Collectors.toList())))
+            .collect(Collectors.groupingBy((aPost -> mapUserToAgegroup.apply(aPost.getUser(), 1000))))
             .entrySet()
             .stream()
-            .collect(Collectors.toMap(Map.Entry::getKey,(entry) -> findPrevalentCategory.apply(entry.getValue())))
+            .collect(Collectors.toMap((entry) -> entry.getKey(),
+                    (entry) -> entry.getValue().stream()
+                            .flatMap(post -> post.getCategories().stream()).collect(Collectors.toList())))
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey,(entry) -> findPrevalentCategory.apply(entry.getValue().stream()
+                    .collect(Collectors.toList()))))
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             ;
 }
