@@ -1,5 +1,6 @@
 import data.DataBuilder;
 import functions.DocLinkFunctions;
+import functions.DoctorsWithMostComments;
 import functions.IssuesNotResolved;
 import models.Comment;
 import models.Post;
@@ -26,7 +27,6 @@ public class Application {
             ex.printStackTrace();
         }
 
-
         //   public static String doctorWithMostComments(){
         Calendar calendar = Calendar.getInstance();
         Date current = calendar.getTime();
@@ -38,11 +38,12 @@ public class Application {
 
         List<Comment> comments = DataBuilder.getComments();
 
-        System.out.println(DocLinkFunctions.getDoctor.apply(comments, past, current));
+        System.out.println(DoctorsWithMostComments.getDoctor.apply(comments, past, current));
 
         List<Post> posts = DataBuilder.getPosts();
 
         System.out.println(IssuesNotResolved.issuesNotResolved.apply(posts));
+
 
 
     }

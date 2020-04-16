@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DoctorsWithMostComments {
-    static IMostComment getDoctor = (listOfComments, date1, date2) -> listOfComments.stream()
+    public static final IMostComment getDoctor = (listOfComments, date1, date2) -> listOfComments.stream()
             .filter(comment-> comment.getCreatedAt().after(date1) && comment.getCreatedAt().before(date2))
             .collect(Collectors.groupingBy(comment -> comment.getUser()))
             .entrySet()
