@@ -19,6 +19,7 @@ public class Comment implements IPostsWithComment {
         this.post = post;
         this.checked = checked;
         this.text = text;
+        this.createdAt = new Date();
     }
 
     public Date getCreatedAt() {
