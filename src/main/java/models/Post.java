@@ -82,7 +82,7 @@ public abstract class Post {
     }
 
     public String categoriesToCsvFormat() {
-        StringBuffer buffer = new StringBuffer("");
+        StringBuffer buffer = new StringBuffer();
         for(Category cat: categories) {
             buffer.append(cat + "<>");
         }
