@@ -1,11 +1,13 @@
 package models;
 
 import data.DataBuilder;
+import functions.DocLinkFunctions;
 import interfaces.ICsv;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class Doctor implements ICsv {
     private Integer id;
@@ -59,10 +61,10 @@ public class Doctor implements ICsv {
 
     @Override
     public String toString() {
-        return "Doctor{" +
+        return "\nDoctor{" +
                 "id=" + id +
                 ", user=" + user +
-                '}';
+                '}' + "\n";
     }
 
     @Override
