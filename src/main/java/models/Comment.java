@@ -13,15 +13,23 @@ public class Comment implements IPostsWithComment {
     private Integer checked;
     private String text;
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
     public Comment(Integer id, User user, Post post, Integer checked, String text) {
         this.id = id;
         this.user = user;
         this.post = post;
-        this.createdAt = new Date();
+        this.checked = checked;
+        this.text = text;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Comment(Integer id, User user, Post post, Integer checked,Date date, String text) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+        this.createdAt = date;
         this.checked = checked;
         this.text = text;
     }
@@ -62,6 +70,7 @@ public class Comment implements IPostsWithComment {
                 ", user=" + user +
                 ", post=" + post +
                 ", checked=" + checked +
+                ", createdAt=" + DataBuilder.getSimpleDateFormat().format(createdAt) +
                 '}';
 
         return String.format("%n%s%n", base);

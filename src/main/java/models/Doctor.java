@@ -57,10 +57,10 @@ public class Doctor implements IPostsWithComment {
 
     @Override
     public String toString() {
-        return "Doctor{" +
+        return "\nDoctor{" +
                 "id=" + id +
                 ", user=" + user +
-                '}';
+                '}' + "\n";
     }
 
     @Override

@@ -175,6 +175,9 @@ public class Generator implements IPostsWithComment {
         int innerCount = id;
         Random random = new Random();
         List<Comment> commentList = new ArrayList<Comment>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -5);
+        Date createdAt = faker.date().future(1025, TimeUnit.DAYS, calendar.getTime());
 
         while (innerCount <= (id + limit)) {
             Doctor doctor = doctors.get(random.nextInt(doctors.size()));
@@ -183,6 +186,7 @@ public class Generator implements IPostsWithComment {
                     doctor.getUser(),
                     post,
                     0,
+                    createdAt,
                     String.join(" ", faker.lorem().sentences(3))
             );
 
@@ -200,6 +204,7 @@ public class Generator implements IPostsWithComment {
                 comment.getUser(),
                 comment.getPost(),
                 1,
+                createdAt,
                 comment.getText()
         ));
 

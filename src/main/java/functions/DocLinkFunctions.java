@@ -1,6 +1,10 @@
 package functions;
 
 import interfaces.*;
+
+import interfaces.IDoctorsFilter;
+import interfaces.IPostRecommendation;
+import interfaces.IPostsFilter;
 import models.*;
 
 import java.util.*;
