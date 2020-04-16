@@ -7,8 +7,10 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class User implements ICsv {
     private Integer id;
@@ -35,6 +37,7 @@ public class User implements ICsv {
         this.email = email;
         this.createdAt = new Date();
         this.updatedAt = this.createdAt;
+
     }
 
     public User(Integer id, String firstName, String lastName, Date birthday, Country country, String email, Date createdAt, Date updatedAt) {
@@ -130,5 +133,23 @@ public class User implements ICsv {
                 DataBuilder.getSimpleDateFormat().format(updatedAt),
                 formatRoles()
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return getId().equals(user.getId()) &&
+                getFirstName().equals(user.getFirstName()) &&
+                getLastName().equals(user.getLastName()) &&
+                getBirthday().equals(user.getBirthday()) &&
+                getCountry() == user.getCountry() &&
+                getEmail().equals(user.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFirstName(), getLastName(), getBirthday(), getCountry(), getEmail(), getCreatedAt(), getUpdatedAt(), getRoles());
     }
 }
