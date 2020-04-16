@@ -15,6 +15,14 @@ public class Comment implements ICsv {
     private Integer checked;
     private String text;
 
+    public Comment(Integer id, User user, Post post, Integer checked, String text) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+        this.checked = checked;
+        this.text = text;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }

@@ -10,10 +10,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class IssuesNotResolved {
-    public static final Function<List<Post>,List<Post>> issuesNotResolved =
+    public static Function<List<Post>,List<Post>> issuesNotResolved =
             (posts) -> posts.stream()
                     .filter(x->x instanceof HealthIssue)
-                    .filter(x->((HealthIssue) x).getStatus().equals(Status.PENDING) && (((HealthIssue) x).getStatus().equals(Status.IN_CONSULTATION)))
+                    .filter(x->((HealthIssue) x).getStatus().equals(Status.PENDING) || (((HealthIssue) x).getStatus().equals(Status.IN_CONSULTATION)))
                     .collect(Collectors.toList());
 
 }
