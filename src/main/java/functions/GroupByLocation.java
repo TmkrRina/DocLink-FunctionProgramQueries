@@ -27,7 +27,4 @@ public class GroupByLocation {
                                             .collect(Collectors.toList())
                             ))));
 
-//    public static BiFunction<List<Post>, String PostType, Map<Country, List<String>>> groupByLocation = (posts, Postype) ->
-
-//            );
 }

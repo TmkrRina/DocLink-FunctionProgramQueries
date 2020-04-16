@@ -1,13 +1,8 @@
 package functions;
 
-import data.DataBuilder;
 import interfaces.*;
-import models.*;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class NonActiveUsers{

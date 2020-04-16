@@ -21,6 +21,7 @@ public class Comment implements ICsv {
         this.post = post;
         this.checked = checked;
         this.text = text;
+        this.createdAt = new Date();
     }
 
     public Date getCreatedAt() {
