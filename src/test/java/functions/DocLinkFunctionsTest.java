@@ -192,7 +192,11 @@ public class DocLinkFunctionsTest {
             }
         };
 
-        List<Post> doctor1ResultPosts = new ArrayList() { { add(posts1.get(0)); add(posts1.get(1)); add(posts1.get(posts1.size() - 2)); } };
+        List<Post> doctor1ResultPosts = new ArrayList() { {
+            add(posts1.get(1)); add(posts1.get(posts1.size() - 2));
+            add(posts1.get(0));
+        }};
+
         List<Post> doctor2ResultPosts = new ArrayList() { { add(posts1.get(posts1.size() - 1)); } };
 
         assertEquals(doctor1ResultPosts, DocLinkFunctions.recommendPostsToDoctors.apply(doctors.get(0),posts1,comments,30));
