@@ -1,13 +1,11 @@
 package models;
 
 import data.DataBuilder;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 
-public class Comment implements ICsv {
+public class Comment implements IPostsWithComment {
     private Integer id;
     private User user;
     private Post post;

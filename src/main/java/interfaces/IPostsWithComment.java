@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface ICsv {
+public interface IPostsWithComment {
     public String writeToCsv();
 }
