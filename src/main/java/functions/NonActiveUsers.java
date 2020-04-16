@@ -22,7 +22,7 @@ public class NonActiveUsers{
             ((doctors, comments, posts) -> userActivityGrouping.apply(doctors, comments, posts)
                     .entrySet()
                     .stream()
-                    .filter(entry -> Long.valueOf(entry.getValue()).equals(0))
+                    .filter(entry -> Long.valueOf(entry.getValue()).equals(Long.valueOf(0)))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList())
             );
@@ -46,7 +46,7 @@ public class NonActiveUsers{
                     .apply(users, comments, posts, startDate, endDate)
                     .entrySet()
                     .stream()
-                    .filter(entry -> Long.valueOf(entry.getValue()).equals(0))
+                    .filter(entry -> Long.valueOf(entry.getValue()).equals(Long.valueOf(0)))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList())
     );

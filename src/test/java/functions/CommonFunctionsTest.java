@@ -1,7 +1,5 @@
-package NonActiveDocsAndUsersTest;
+package functions;
 
-import functions.CommonFunctions;
-import functions.DocLinkFunctions;
 import models.*;
 
 import org.junit.Before;
@@ -15,20 +13,7 @@ public class CommonFunctionsTest {
     User user;
     User userForDoctor;
     List<Post> posts;
-//    List<User> user = new ArrayList<User>() {
-//       User user1 = new User(1, "User1", "Last1", new Date(), "USA", "email@gmail.com");
-//        User user2 = new User(1, "User1", "Last1", new Date(), "USA", "email@gmail.com");
-//        User user3 = new User(1, "User1", "Last1", new Date(), "USA", "email@gmail.com");
-//        User user4 = new User(1, "User1", "Last1", new Date(), "USA", "email@gmail.com");
-//    };
-//
-//    List<Doctor> doctors = new ArrayList<Doctor>(){
-//        {
-//            add(new Doctor(1,Specialization.getRandom().name(), "experience",user1));
-//            add(new Doctor(2,Specialization.getRandom().name(), "experience",user2));
-//        }
-//    };
-//    private List<Post> posts;
+
     private List<Category> categories = new ArrayList<Category>() {
         {
             add(Category.HEART);
@@ -45,6 +30,7 @@ public class CommonFunctionsTest {
                 new Date(),
                 Country.USA,
                 "email@gmail.com", new Date(), new Date(), new ArrayList(){{ add(Role.PATIENT); }});
+
         posts = new ArrayList<>();
 
         userForDoctor = new User(
@@ -123,6 +109,52 @@ public class CommonFunctionsTest {
 
 
 
+    @Test
+    public void getAllAnnouncementsCountInRange() {
+
+        User userForDoctor2 = new User(
+                3,
+                "User1",
+                "Last1",
+                new Date(),
+                Country.USA,
+                "email@gmail.com",
+                new Date(),
+                new Date(),
+                new ArrayList(){{ add(Role.DOCTOR); }});
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(2015, 10, 12);
+        Date startDate = cal.getTime();
+
+        cal.set(2015, 11,12 );
+        Date startDate1 = cal.getTime();
+
+        cal.set(2015, 11,20 );
+        Date startDate2 = cal.getTime();
+
+        cal.set(2015, 12,20 );
+        Date startDate3 = cal.getTime();
+
+        cal.set(2018, 11, 12);
+        Date endDate = cal.getTime();
+
+        Doctor doctor = new Doctor(1,Specialization.getRandom().name(), "Experience", userForDoctor2);
+
+        posts.add(new Announcement(1, "title", "description", doctor, startDate1, startDate1, categories));
+        posts.add(new Announcement(2, "title", "description", doctor, startDate1, startDate1, categories));
+        posts.add(new HealthIssue(3, "title", "description", user, startDate1, startDate1, categories));
+        posts.add(new HealthIssue(4, "title", "description", user, startDate1, startDate1, categories));
+
+
+        Long count = 2l;
+        assertEquals(count, CommonFunctions.getAllAnnouncementsCountInRange.apply(userForDoctor2, posts,  startDate, endDate));
+        assertEquals(count, CommonFunctions.getAllHealthIssuesCountInRange.apply(user, posts,  startDate, endDate));
+
+
+
+    }
 
 
 }

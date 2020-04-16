@@ -25,7 +25,7 @@ public class NonActiveDoctors {
             ((doctors, comments, posts) -> doctorsActivityGrouping.apply(doctors, comments, posts)
                     .entrySet()
                     .stream()
-                    .filter(entry -> Long.valueOf(entry.getValue()).equals(0))
+                    .filter(entry -> Long.valueOf(entry.getValue()).equals(Long.valueOf(0)))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList())
             );
@@ -54,7 +54,7 @@ public class NonActiveDoctors {
                     .apply(doctors, comments, posts, startDate, endDate)
                     .entrySet()
                     .stream()
-                    .filter(entry -> Long.valueOf(entry.getValue()).equals(0))
+                    .filter(entry -> Long.valueOf(entry.getValue()).equals(Long.valueOf(0)))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList())
             );
