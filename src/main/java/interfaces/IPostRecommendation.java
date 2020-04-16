@@ -8,5 +8,5 @@ import models.User;
 import java.util.List;
 
 public interface IPostRecommendation {
-    List<Post> apply(Doctor doctor, List<Post> posts, List<Comment> comments, Integer threshHold);
+    List<Post> apply(Doctor doctor, User user, List<Post> posts, List<Comment> comments, Integer threshHold);
 }

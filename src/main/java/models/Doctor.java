@@ -1,15 +1,11 @@
 package models;
 
 import data.DataBuilder;
-import functions.DocLinkFunctions;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
-public class Doctor implements ICsv {
+public class Doctor implements IPostsWithComment {
     private Integer id;
     private Specialization specialization;
     private String experience;

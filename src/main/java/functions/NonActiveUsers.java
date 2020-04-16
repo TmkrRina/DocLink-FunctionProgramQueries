@@ -1,13 +1,8 @@
 package functions;
 
-import data.DataBuilder;
 import interfaces.*;
-import models.*;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class NonActiveUsers{
@@ -27,7 +22,7 @@ public class NonActiveUsers{
             ((doctors, comments, posts) -> userActivityGrouping.apply(doctors, comments, posts)
                     .entrySet()
                     .stream()
-                    .filter(entry -> Long.valueOf(entry.getValue()).equals(0))
+                    .filter(entry -> Long.valueOf(entry.getValue()).equals(Long.valueOf(0)))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList())
             );
@@ -51,7 +46,7 @@ public class NonActiveUsers{
                     .apply(users, comments, posts, startDate, endDate)
                     .entrySet()
                     .stream()
-                    .filter(entry -> Long.valueOf(entry.getValue()).equals(0))
+                    .filter(entry -> Long.valueOf(entry.getValue()).equals(Long.valueOf(0)))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList())
     );
