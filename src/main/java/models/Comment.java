@@ -35,6 +35,8 @@ public class Comment implements IPostsWithComment {
         this.text = text;
     }
 
+
+
     public Comment(Integer id, User user, Post post, Integer checked, String text, Date createdAt) {
         this.id = id;
         this.user = user;

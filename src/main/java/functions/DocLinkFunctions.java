@@ -1,16 +1,18 @@
 package functions;
 
+import models.*;
+
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import interfaces.*;
 
 import interfaces.IDoctorsFilter;
 import interfaces.IPostRecommendation;
 import interfaces.IPostsFilter;
-import models.*;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class DocLinkFunctions {
     public static final BiFunction<User, List<Comment>, List<Comment>> getAllComments = (
