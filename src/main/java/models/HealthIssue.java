@@ -1,13 +1,12 @@
 package models;
 
 import data.DataBuilder;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class HealthIssue extends Post implements ICsv {
+public class HealthIssue extends Post implements IPostsWithComment {
     private Status status;
 
     public HealthIssue(Integer id, String title, String description, User user, List<Category> categoryList, Status status) {

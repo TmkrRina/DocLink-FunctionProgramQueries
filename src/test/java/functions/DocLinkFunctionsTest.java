@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
@@ -101,7 +102,9 @@ public class DocLinkFunctionsTest {
             { add(comment1); add(comment2); add(comment3); }
         };
 
-        List<String> result = DocLinkFunctions.tokenizePostsThroughComments.apply(DocLinkFunctions.getAllComments.apply(user, comments));
+        List<String> result = DocLinkFunctions.tokenizePostsThroughComments.apply(
+                DocLinkFunctions.getAllComments.apply(user, comments)
+                );
         assertEquals(Arrays.asList("description1","description2"), result);
 
         User newUser2 = new User(4,"user4", "last4",new Date(),"Nigeria","a@gmail.com");
@@ -122,6 +125,8 @@ public class DocLinkFunctionsTest {
             {
                 addAll(posts);
                 add(new HealthIssue(posts.size(),"Title21","description23",user,categories, Status.PENDING));
+                add(new HealthIssue(posts.size() + 1,"Title22","description23 description1 description2 description3",user,categories, Status.PENDING));
+                add(new HealthIssue(posts.size() + 2,"Title23","description3 description4 description3",user,categories, Status.PENDING));
             }
         };
 
@@ -142,24 +147,24 @@ public class DocLinkFunctionsTest {
         };
 
         List<String> userTokens = DocLinkFunctions.tokenize.apply(
-                DocLinkFunctions.reducePosts.apply(DocLinkFunctions.getAllHealthIssues.apply(user, posts))
+                DocLinkFunctions.reducePosts.apply(DocLinkFunctions.getAllHealthIssues.apply(user, posts1))
         );
 
-        List<String> doctorsTokens = DocLinkFunctions.tokenizePostsThroughComments.apply(DocLinkFunctions.getAllComments.apply(doctors.get(0).getUser(), comments));
+        List<String> doctorsTokens = DocLinkFunctions.tokenizePostsThroughComments.apply(
+                DocLinkFunctions.getAllComments.apply(doctors.get(0).getUser(), comments)
+        );
 
         Set<String> intersection = DocLinkFunctions.getIntersection.apply(userTokens, doctorsTokens);
 
         double calcIndex = ((double) intersection.size() / ((userTokens.size() + doctorsTokens.size()) - intersection.size())) * 100;
 
-        List<Doctor> recommendedDoctors = DocLinkFunctions.doctorsMap.apply(userTokens, doctors, comments, 30);
+        List<Doctor> recommendedDoctors = DocLinkFunctions.recommendDoctorsToUser.apply(user, posts1, doctors, comments, 30);
+
         assertEquals(recommendedDoctors.size(), 1);
         assertThat(recommendedDoctors, hasItem(doctors.get(0)));
         assertEquals(Double.valueOf(calcIndex), DocLinkFunctions.jaccardIndex.apply(userTokens, doctorsTokens));
 
-
-        assertEquals(new ArrayList<>(), DocLinkFunctions.doctorsMap.apply(null, null, null, null));
-
-        assertEquals(recommendedDoctors, DocLinkFunctions.recommendDoctorsToUser.apply(user, posts1, doctors, comments, 30));
+        assertEquals(new ArrayList<>(), DocLinkFunctions.recommendDoctorsToUser.apply(null,null, null, null, null));
     }
 
     @Test
@@ -171,7 +176,7 @@ public class DocLinkFunctionsTest {
             {
                 addAll(posts);
                 add(new HealthIssue(posts.size(),"Title21","description23",user,categories, Status.PENDING));
-                add(new HealthIssue(posts.size(),"Title24","description2 description3 description of mine",user,categories, Status.PENDING));
+                add(new HealthIssue(posts.size() + 1,"Title24","description23 description2 description1 description4 description3 description of mine",user,categories, Status.PENDING));
             }
         };
 
@@ -184,23 +189,75 @@ public class DocLinkFunctionsTest {
 
         List<Comment> comments = new ArrayList<Comment>() {
             {
-                add(new Comment(1, user1, posts.get(0), 0, "Dummy1"));
-                add(new Comment(2, user1, posts.get(1), 0, "Dummy1"));
+                add(new Comment(1, user1, posts1.get(0), 0, "Dummy1"));
+                add(new Comment(2, user1, posts1.get(1), 0, "Dummy1"));
                 add(new Comment(3, user1, posts1.get(posts1.size() - 2), 0, "Dummy1"));
-                add(new Comment(4, user2, posts.get(2), 0, "Dummy1"));
+                add(new Comment(4, user2, posts1.get(2), 0, "Dummy1"));
                 add(new Comment(5, user2, posts1.get(posts1.size() - 1), 0, "Dummy1"));
+//                add(new Comment(6, user1, posts1.get(posts1.size() - 1), 0, "Dummy1"));
             }
         };
 
-        List<Post> doctor1ResultPosts = new ArrayList() { {
-            add(posts1.get(1)); add(posts1.get(posts1.size() - 2));
-            add(posts1.get(0));
+
+        List<Post> doctor1ExpectedPostsWithComments = new ArrayList() { { add(posts1.get(0)); add(posts1.get(1)); add(posts1.get(posts1.size() - 2)); } };
+        List<Post> doctor1ExpectedPostsWithNoComments = new ArrayList() {{ add(posts1.get(2)); add(posts1.get(3)); add(posts1.get(posts1.size() - 1)); }};
+
+        List<Post> postsThroughComments = DocLinkFunctions.getPostsThroughComments.apply(comments);
+
+        assertThat(postsThroughComments, hasItem(posts1.get(0)));
+
+        List<Post> postsWithComment = DocLinkFunctions.userPostsWithDoctorComment.apply(user, doctors.get(0), comments);
+
+        assertEquals(doctor1ExpectedPostsWithComments, postsWithComment);
+
+        List<Integer> postIdsWithComment = DocLinkFunctions.getPostIds.apply(postsWithComment);
+        List<Post> postsWithoutDoctorsComments = DocLinkFunctions.userPostsWithNoDoctorsComment.apply(posts1, postIdsWithComment);
+
+        assertEquals(doctor1ExpectedPostsWithNoComments, postsWithoutDoctorsComments);
+
+        List<String> doctorsToken = DocLinkFunctions.tokenizePostsThroughComments.apply(DocLinkFunctions.getAllComments.apply(user1, comments));
+
+        List<String> usersToken = DocLinkFunctions.tokenize.apply(DocLinkFunctions.reducePosts.apply(postsWithoutDoctorsComments));
+
+
+        Set<String> intersection = DocLinkFunctions.getIntersection.apply(doctorsToken, usersToken);
+
+        Set<String> expectedIntersection = new HashSet<String>() { { add("description23"); add("description2"); add("description1"); }};
+
+        assertEquals(expectedIntersection, intersection);
+
+//        Double calcIndex = DocLinkFunctions.jaccardIndex.apply(doctorsToken, usersToken);
+
+
+        List<Post> recommendedPostForDoc1 = Arrays.asList(posts1.get(posts1.size() - 1));
+
+        assertEquals(recommendedPostForDoc1, DocLinkFunctions.recommendPostsToDoctors.apply(doctors.get(0), user, posts1,comments,30));
+
+
+        List<String> doctor2Token = DocLinkFunctions.tokenizePostsThroughComments.apply(DocLinkFunctions.getAllComments.apply(user2, comments));
+
+        expectedIntersection = new HashSet<String>() { {
+            add("description4");
+            add("description23");
+            add("description2");
+            add("description1");
         }};
 
-        List<Post> doctor2ResultPosts = new ArrayList() { { add(posts1.get(posts1.size() - 1)); } };
+        postsWithComment = DocLinkFunctions.userPostsWithDoctorComment.apply(user, doctors.get(1), comments);
+        postIdsWithComment = DocLinkFunctions.getPostIds.apply(postsWithComment);
+        postsWithoutDoctorsComments = DocLinkFunctions.userPostsWithNoDoctorsComment.apply(posts1, postIdsWithComment);
 
-        assertEquals(doctor1ResultPosts, DocLinkFunctions.recommendPostsToDoctors.apply(doctors.get(0),posts1,comments,30));
-        assertEquals(doctor2ResultPosts, DocLinkFunctions.recommendPostsToDoctors.apply(doctors.get(1),posts1,comments,30));
+        usersToken = DocLinkFunctions.tokenize.apply(DocLinkFunctions.reducePosts.apply(postsWithoutDoctorsComments));
+
+        intersection = DocLinkFunctions.getIntersection.apply(doctor2Token, usersToken);
+
+        assertEquals(expectedIntersection, intersection);
+
+        List<Post> recommendedPost = DocLinkFunctions.recommendPostsToDoctors.apply(doctors.get(1), user ,posts1,comments,30);
+
+        assertEquals(new ArrayList(), recommendedPost);
+
+        assertTrue(DocLinkFunctions.jaccardIndex.apply(doctor2Token, usersToken) > 30);
 
     }
 }
