@@ -1,13 +1,11 @@
 package models;
 
 import data.DataBuilder;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 
-public class Comment implements ICsv {
+public class Comment implements IPostsWithComment {
     private Integer id;
     private User user;
     private Post post;
@@ -15,18 +13,29 @@ public class Comment implements ICsv {
     private Integer checked;
     private String text;
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
     public Comment(Integer id, User user, Post post, Integer checked, String text) {
         this.id = id;
         this.user = user;
         this.post = post;
+        this.checked = checked;
+        this.text = text;
         this.createdAt = new Date();
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Comment(Integer id, User user, Post post, Integer checked,Date date, String text) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+        this.createdAt = date;
         this.checked = checked;
         this.text = text;
     }
+
+
 
     public Comment(Integer id, User user, Post post, Integer checked, String text, Date createdAt) {
         this.id = id;
@@ -64,7 +73,7 @@ public class Comment implements ICsv {
                 ", user=" + user +
                 ", post=" + post +
                 ", checked=" + checked +
-                ", createdAtP="+createdAt+
+                ", createdAt=" + DataBuilder.getSimpleDateFormat().format(createdAt) +
                 '}';
 
         return String.format("%n%s%n", base);

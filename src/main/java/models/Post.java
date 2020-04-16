@@ -71,14 +71,14 @@ public abstract class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
+        return "\nPost{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", user=" + user +
                 ", postType=" + postType +
                 ", categories=" + categories +
-                '}';
+                '}' + "\n";
     }
 
     public String categoriesToCsvFormat() {
@@ -89,4 +89,6 @@ public abstract class Post {
 
         return "\"" + buffer.toString().substring(0, buffer.length() - 2) + "\"";
     }
+
+
 }

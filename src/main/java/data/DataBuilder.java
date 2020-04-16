@@ -15,7 +15,7 @@ public class DataBuilder {
     static List<User> users = new ArrayList<User>();
     static List<Doctor> doctors = new ArrayList<Doctor>();
     static List<Comment> comments = new ArrayList<Comment>();
-    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static List<Post> getPosts() {
         return posts;

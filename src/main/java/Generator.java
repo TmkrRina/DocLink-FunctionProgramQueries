@@ -1,5 +1,5 @@
 import com.github.javafaker.Faker;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 import models.*;
 
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class Generator implements ICsv {
+public class Generator implements IPostsWithComment {
     private List<User> users;
     private List<Doctor> doctors;
     private List<Post> posts;
@@ -17,12 +17,12 @@ public class Generator implements ICsv {
     private List<Comment> comments;
 
     public Generator() {
-        this.users = new ArrayList<User>();
-        this.doctors = new ArrayList<Doctor>();
-        this.posts = new ArrayList<Post>();
-        this.healthIssues = new ArrayList<HealthIssue>();
-        this.announcements = new ArrayList<Announcement>();
-        this.comments = new ArrayList<Comment>();
+        this.users = new ArrayList<>();
+        this.doctors = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.healthIssues = new ArrayList<>();
+        this.announcements = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     public void run() {
@@ -175,6 +175,9 @@ public class Generator implements ICsv {
         int innerCount = id;
         Random random = new Random();
         List<Comment> commentList = new ArrayList<Comment>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -5);
+        Date createdAt = faker.date().future(1025, TimeUnit.DAYS, calendar.getTime());
 
         while (innerCount <= (id + limit)) {
             Doctor doctor = doctors.get(random.nextInt(doctors.size()));
@@ -183,6 +186,7 @@ public class Generator implements ICsv {
                     doctor.getUser(),
                     post,
                     0,
+                    createdAt,
                     String.join(" ", faker.lorem().sentences(3))
             );
 
@@ -200,6 +204,7 @@ public class Generator implements ICsv {
                 comment.getUser(),
                 comment.getPost(),
                 1,
+                createdAt,
                 comment.getText()
         ));
 
@@ -216,9 +221,9 @@ public class Generator implements ICsv {
 
         String filename = list.get(0).getClass().getName().toLowerCase();
 
-        List<ICsv> transformed = convertToICsv(list);
+        List<IPostsWithComment> transformed = convertToICsv(list);
 
-        for (ICsv obj : transformed) {
+        for (IPostsWithComment obj : transformed) {
             buffer.append(obj.writeToCsv() + "\n");
         }
 
@@ -246,11 +251,11 @@ public class Generator implements ICsv {
 
     }
 
-    private List<ICsv> convertToICsv(List list) {
-        List<ICsv> output = new ArrayList<ICsv>();
+    private List<IPostsWithComment> convertToICsv(List list) {
+        List<IPostsWithComment> output = new ArrayList<IPostsWithComment>();
 
         for (Object item : list) {
-            output.add((ICsv) item);
+            output.add((IPostsWithComment) item);
         }
 
         return output;

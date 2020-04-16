@@ -1,19 +1,21 @@
 package models;
 
 import data.DataBuilder;
-import interfaces.ICsv;
+import interfaces.IPostsWithComment;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class HealthIssue extends Post implements ICsv {
+public class HealthIssue extends Post implements IPostsWithComment {
     private Status status;
+    private List<Comment> comments;
 
-    public HealthIssue(Integer id, String title, String description, User user, List<Category> categoryList, Status status) {
+    public HealthIssue(Integer id, String title, String description, User user, List<Category> categoryList, Status status)  {
         super(id, title, description, user, categoryList);
         this.postType = PostType.HEALTH_ISSUE;
         this.status = status;
+        this.comments = new ArrayList<>();
     }
 
     public HealthIssue(Integer id, String title, String description, User user, Date createdAt, Date updatedAt, List<Category> categories) {
@@ -28,6 +30,9 @@ public class HealthIssue extends Post implements ICsv {
         this.postType = PostType.HEALTH_ISSUE;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
     public Status getStatus() {
         return status;
     }
